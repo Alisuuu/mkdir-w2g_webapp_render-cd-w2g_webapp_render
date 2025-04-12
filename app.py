@@ -4,8 +4,8 @@ import os
 
 app = Flask(__name__)
 
-# A chave de API será configurada como variável de ambiente no Render
-W2G_API_KEY = os.environ.get('0akv02n2qhf765b0eiabt9uujt0t38usp4m9lwti8p53asusrnw48mav8z8nzv5y')
+# A chave de API será lida da variável de ambiente no Render
+W2G_API_KEY = os.environ.get('W2G_API_KEY')
 W2G_CREATE_ROOM_URL = "https://api.w2g.tv/rooms/create.json"
 
 @app.route('/')
@@ -14,6 +14,7 @@ def index():
 
 @app.route('/create_room', methods=['POST'])
 def create_w2g_room():
+    print(f"Valor de W2G_API_KEY ANTES da verificação: '{W2G_API_KEY}'") # Para diagnóstico
     if not W2G_API_KEY:
         return jsonify({'error': 'Chave de API do Watch2Gether não configurada no Render'}), 500
 
@@ -37,7 +38,12 @@ def create_w2g_room():
     except ValueError:
         return jsonify({'error': 'Resposta inválida da API do Watch2Gether'}), 500
 
+@app.route('/test_key')
+def test_key():
+    api_key = os.environ.get('W2G_API_KEY')
+    return jsonify({'api_key': api_key})
+
 if __name__ == '__main__':
     # Não execute o servidor de desenvolvimento do Flask em produção no Render
     pass
-  
+    
