@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Criar Sala Watch2Gether</title>
+    <style>
+        body { font-family: sans-serif; }
+        #result { margin-top: 20px; font-weight: bold; }
+        .error { color: red; }
+    </style>
+</head>
+<body>
+    <h1>Criar Sala Watch2Gether</h1>
+    <form id="createRoomForm">
+        <div>
+            <label for="video_url">URL do Vídeo:</label>
+            <input type="url" id="video_url" name="video_url" size="50" required>
+        </div>
+        <button type="submit">Criar Sala</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('createRoomForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const videoUrl = document.getElementById('video_url').value;
+            fetch('/create_room', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `video_url=${encodeURIComponent(videoUrl)}`,
+            })
+            .then(response => response.json())
+            .then(data => {
+                const resultDiv = document.getElementById('result');
+                if (data.error) {
+                    resultDiv.className = 'error';
+                    resultDiv.textContent = `Erro: ${data.error}`;
+                } else if (data.room_url) {
+                    resultDiv.className = '';
+                    resultDiv.textContent = `Sala criada com sucesso! Link: ${data.room_url}`;
+                }
+            })
+            .catch(error => {
+                const resultDiv = document.getElementById('result');
+                resultDiv.className = 'error';
+                resultDiv.textContent = `Erro na requisição: ${error}`;
+            });
+        });
+    </script>
+</body>
+</html>
