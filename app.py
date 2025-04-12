@@ -5,7 +5,7 @@ import os
 app = Flask(__name__)
 
 # A chave de API será configurada como variável de ambiente no Render
-W2G_API_KEY = os.environ.get('W2G_API_KEY')
+W2G_API_KEY = os.environ.get('0akv02n2qhf765b0eiabt9uujt0t38usp4m9lwti8p53asusrnw48mav8z8nzv5y')
 W2G_CREATE_ROOM_URL = "https://api.w2g.tv/rooms/create.json"
 
 @app.route('/')
